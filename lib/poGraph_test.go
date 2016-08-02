@@ -364,12 +364,12 @@ func TestFqReader_Iter(t *testing.T) {
 	r, done := fqr.Iter()
 
 	assert.True(t, !done)
-	assert.True(t, r.Name == ">seq1")
+	assert.True(t, r.Name == "seq1")
 	assert.True(t, r.Seq == "PKMIVRPQKNETV")
 
 	r, done = fqr.Iter()
 	assert.True(t, !done)
-	assert.True(t, r.Name == ">seq2")
+	assert.True(t, r.Name == "seq2")
 	assert.True(t, r.Seq == "THKMLVRNETIM")
 
 	_, done = fqr.Iter()

@@ -5,7 +5,9 @@ import (
 	"flag"
 	"fmt"
 	"github.com/ArtRand/PoaGo/lib"
+	"log"
 	"os"
+	"runtime/pprof"
 )
 
 func check(ok error, msg string) {
@@ -18,12 +20,22 @@ func check(ok error, msg string) {
 
 func main() {
 	inFile := flag.String("f", "", "file location")
+	cpuprofile := flag.String("cpuprofile", "", "write cpu profile to file")
 
 	flag.Parse()
 
 	fH, ok := os.Open(*inFile)
 	check(ok, fmt.Sprintf("Error opening file %v", *inFile))
 	defer fH.Close()
+
+	if *cpuprofile != "" {
+		f, err := os.Create(*cpuprofile)
+		if err != nil {
+			log.Fatal(err)
+		}
+		pprof.StartCPUProfile(f)
+		defer pprof.StopCPUProfile()
+	}
 
 	fqr := PoaGo.FqReader{Reader: bufio.NewReader(fH)}
 
@@ -35,8 +47,11 @@ func main() {
 
 	aln := PoaGo.PairwiseAlignmentParametersConstruct(4.0, -2.0, -4.0, -2.0)
 
-	for !done {
+	for {
 		r, done = fqr.Iter()
+		if done {
+			break
+		}
 		pA := PoaGo.AlignStringToGraph(g, aln, r.Seq, r.Name)
 		g.AddSequenceAlignment(pA)
 	}
