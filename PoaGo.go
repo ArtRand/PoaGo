@@ -4,10 +4,11 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
-	"github.com/ArtRand/PoaGo/lib"
 	"log"
 	"os"
 	"runtime/pprof"
+
+	PoaGo "github.com/ArtRand/PoaGo/lib"
 )
 
 func check(ok error, msg string) {
@@ -18,11 +19,23 @@ func check(ok error, msg string) {
 	}
 }
 
+const (
+	VERSION  = "NOTSET"
+	REVISION = "NOTSET"
+)
+
 func main() {
 	inFile := flag.String("f", "", "file location")
 	cpuprofile := flag.String("cpuprofile", "", "write cpu profile to file")
+	version := flag.Bool("version", false, "print the version and revision")
 
 	flag.Parse()
+
+	if *version {
+		fmt.Printf("Version: %s", VERSION)
+		fmt.Printf("Revision: %s", REVISION)
+		os.Exit(0)
+	}
 
 	fH, ok := os.Open(*inFile)
 	check(ok, fmt.Sprintf("Error opening file %v", *inFile))
