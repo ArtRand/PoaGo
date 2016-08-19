@@ -6,6 +6,8 @@ import (
 	"testing"
 	"os"
 	"bufio"
+	"math/rand"
+	"time"
 )
 
 func TestNodeConstruct(t *testing.T) {
@@ -374,5 +376,14 @@ func TestFqReader_Iter(t *testing.T) {
 
 	_, done = fqr.Iter()
 	assert.True(t, done)
+}
+
+func TestRandomSequence(t *testing.T) {
+	rand.Seed(time.Now().UnixNano())
+	reference := fmt.Sprintf(RandomSequence(100))
+	fmt.Println(reference)
+	e_ref := EvolveSequence(reference)
+	fmt.Println(reference)
+	fmt.Println(e_ref)
 
 }
